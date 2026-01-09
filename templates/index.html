@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digital Attendance Dashboard</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-[#131314] text-gray-100 min-h-screen font-sans">
+
+  <div class="max-w-6xl mx-auto p-4 md:p-8">
+
+    <nav
+      class="bg-gradient-to-r from-[#1c1c1e] to-blue-900 shadow-xl rounded-2xl px-6 py-4 mb-8 flex flex-col md:flex-row justify-between items-center gap-4 border border-gray-800">
+      <a class="text-xl font-bold tracking-tight text-white" href="/">Digital Attendance</a>
+      <div class="flex gap-2">
+        <a class="px-4 py-2 text-sm font-medium border border-blue-400 text-blue-400 rounded-lg hover:bg-blue-400 hover:text-white transition duration-200"
+          href="/add_student">Add Student</a>
+        <a class="px-4 py-2 text-sm font-medium border border-blue-400 text-blue-400 rounded-lg hover:bg-blue-400 hover:text-white transition duration-200"
+          href="/mark_attendance">Mark Attendance</a>
+        <a class="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200"
+          href="/attendance_record">Records</a>
+      </div>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <div class="lg:col-span-4 space-y-6">
+        <div class="bg-[#1c1c1e] p-6 rounded-2xl border border-gray-800 shadow-2xl">
+          <h5 class="text-lg font-semibold text-white mb-2">Quick Actions</h5>
+          <p class="text-sm text-gray-400 mb-6">Create student entries, capture faces, or start recognition.</p>
+
+          <div class="flex flex-col gap-3">
+            <a href="/add_student"
+              class="flex items-center justify-center py-3 bg-blue-600 hover:bg-blue-700 rounded-xl font-medium transition shadow-lg shadow-blue-900/20">
+              Add New Student
+            </a>
+            <a href="/mark_attendance"
+              class="flex items-center justify-center py-3 bg-emerald-600 hover:bg-emerald-700 rounded-xl font-medium transition shadow-lg shadow-emerald-900/20">
+              Launch Attendance
+            </a>
+            <a href="/attendance_record"
+              class="flex items-center justify-center py-3 bg-[#2c2c2e] hover:bg-[#3a3a3c] rounded-xl font-medium border border-gray-700 transition">
+              View History
+            </a>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-2xl text-white shadow-xl">
+          <p class="text-blue-100 text-sm opacity-80 uppercase tracking-widest font-bold">Status</p>
+          <h3 class="text-2xl font-bold mt-1">System Active</h3>
+          <p class="text-xs mt-4 bg-white/20 inline-block px-2 py-1 rounded">Camera: Connected</p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-8 space-y-8">
+
+        <div class="bg-[#1c1c1e] p-6 rounded-2xl border border-gray-800 shadow-2xl">
+          <div class="flex justify-between items-center mb-6">
+            <div>
+              <h5 class="text-lg font-semibold text-white">Train AI Model</h5>
+              <p id="trainMsg" class="text-sm text-gray-500">Updates the recognition database.</p>
+            </div>
+            <button id="trainBtn"
+              class="px-5 py-2 border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white rounded-lg transition font-medium text-sm">
+              Start Training
+            </button>
+          </div>
+
+          <div class="space-y-2">
+            <div class="w-full bg-gray-800 rounded-full h-4 overflow-hidden">
+              <div id="trainProgress"
+                class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full w-0 transition-all duration-500 flex items-center justify-center text-[10px] font-bold text-white uppercase">
+                0%
+              </div>
+            </div>
+            <div class="flex justify-between text-[10px] text-gray-600 uppercase font-bold tracking-widest">
+              <span>Ready</span>
+              <span>Complete</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#1c1c1e] p-6 rounded-2xl border border-gray-800 shadow-2xl">
+          <h5 class="text-lg font-semibold text-white mb-6">Attendance Trends (Last 30 days)</h5>
+          <div class="h-[320px] w-full">
+            <canvas id="attendanceChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="static/js/dashboard.js"></script>
+
+  <script>
+    // Note: If your dashboard.js doesn't handle the Chart.js theme, 
+    // you can add this to make the chart labels white:
+    Chart.defaults.color = '#9ca3af';
+    Chart.defaults.borderColor = '#374151';
+  </script>
+</body>
+
+</html>
