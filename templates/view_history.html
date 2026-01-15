@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>AttendIQ | Monthly Analytics & Fines</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#131314] text-gray-100 p-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h2 class="text-2xl font-bold">Attendance Analytics & Fines</h2>
+        <p class="text-gray-400">View performance and penalty records</p>
+      </div>
+      <div class="flex gap-4">
+        <a href="/export_report?month={{ current_month }}&year={{ current_year }}"
+          class="bg-emerald-600 hover:bg-emerald-700 px-4 py-2 rounded font-bold text-sm transition">Export CSV</a>
+        <button onclick="window.print()"
+          class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded font-bold text-sm transition">Print PDF</button>
+      </div>
+    </div>
+
+    <div class="bg-[#1c1c1e] p-4 rounded-xl border border-gray-800 mb-8 flex items-center justify-between">
+      <div>
+        <span class="text-sm text-gray-400 uppercase font-bold">Current Fine Policy:</span>
+        <span class="ml-2 text-yellow-500 font-mono">₹<span id="fineVal">{{ config.fine_per_lecture }}</span> per
+          shortfall lecture</span>
+      </div>
+      <form action="/update_fine" method="POST" class="flex gap-2">
+        <input type="number" name="fine_amount" placeholder="New Fine Amt"
+          class="bg-[#131314] border border-gray-700 rounded px-2 text-sm outline-none text-white focus:ring-2 focus:ring-blue-500"
+          required>
+        <button type="submit"
+          class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-xs font-bold transition">Update Fine</button>
+      </form>
+    </div>
+
+    <div class="bg-[#1c1c1e] rounded-2xl border border-gray-800 overflow-hidden shadow-2xl">
+      <table class="w-full text-left">
+        <thead class="bg-[#2c2c2e] text-gray-400 text-xs uppercase tracking-widest">
+          <tr>
+            <th class="p-4 border-r border-gray-700">Roll No</th>
+            <th class="p-4 border-r border-gray-700">Student Name</th>
+            <th class="p-4 text-center">Attended</th>
+            <th class="p-4 text-center">Total</th>
+            <th class="p-4 text-center bg-blue-900/20 text-blue-400">Monthly %</th>
+            <th class="p-4 text-center bg-red-900/20 text-red-400">Fine (₹)</th>
+            <th class="p-4 text-center border-l border-gray-700">Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-800">
+          {% for student in analytics_data %}
+          <tr class="hover:bg-white/5 transition {{ 'opacity-50 grayscale-[0.5]' if student.is_paid }}">
+            <td class="p-4 font-mono text-gray-400 border-r border-gray-700">{{ student.roll }}</td>
+
+            <td
+              class="p-4 font-bold border-r border-gray-700 {{ 'text-red-500' if student.percentage < 75 else 'text-white' }}">
+              {{ student.name }}
+            </td>
+
+            <td class="p-4 text-center">{{ student.attended }}</td>
+            <td class="p-4 text-center text-gray-500">{{ student.total_scheduled }}</td>
+
+            <td class="p-4 text-center font-bold">
+              <span class="{{ 'text-green-500' if student.percentage >= 75 else 'text-red-500' }}">
+                {{ student.percentage }}%
+              </span>
+            </td>
+
+            <td class="p-4 text-center font-bold text-red-400">
+              {% if student.percentage < 75 %} ₹{{ student.fine }} <div
+                class="text-[9px] text-gray-500 font-normal uppercase tracking-tighter mt-1">
+                Needs {{ student.required_for_75 - student.attended }} more
+    </div>
+    {% else %}
+    <span class="text-emerald-500 italic text-sm">₹0 (Safe)</span>
+    {% endif %}
+    </td>
+
+    <td class="p-4 text-center border-l border-gray-700">
+      <div class="flex items-center justify-center gap-2">
+        <input type="checkbox" onchange="togglePaid({{ student.id }})" {{ 'checked' if student.is_paid }}
+          class="w-5 h-5 rounded border-gray-700 bg-[#131314] text-blue-600 focus:ring-blue-500 cursor-pointer">
+        <span class="text-[10px] uppercase font-bold {{ 'text-green-500' if student.is_paid else 'text-gray-500' }}">
+          {{ 'Paid' if student.is_paid else 'Unpaid' }}
+        </span>
+      </div>
+    </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+  </div>
+  </div>
+
+  <script>
+    async function togglePaid(studentId) {
+      try {
+        const response = await fetch(`/toggle_fine_status/${studentId}`, {
+          method: 'POST'
+        });
+        if (response.ok) {
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error("Failed to update payment status", error);
+        alert("Error connecting to server.");
+      }
+    }
+  </script>
+</body>
+
+</html>

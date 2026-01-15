@@ -1,0 +1,2 @@
+tommorror plan:- camera option attendance
+save student details based on thier semster and branch

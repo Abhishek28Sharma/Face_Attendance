@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Manage College Routine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#131314] text-gray-100 min-h-screen p-4 md:p-8">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-2xl font-bold">College Timetable</h2>
+      <a href="/" class="text-sm bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-600 transition">Back to Dashboard</a>
+    </div>
+
+    <div class="bg-[#1c1c1e] p-6 rounded-2xl border border-gray-800 mb-8 shadow-xl">
+      <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Add New Period</h3>
+      <form method="POST" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div>
+          <label class="block text-[10px] text-gray-500 uppercase mb-1">Day</label>
+          <select name="day_of_week"
+            class="w-full bg-[#131314] border border-gray-700 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500"
+            required>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+          </select>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-[10px] text-gray-500 uppercase mb-1">Subject Name</label>
+          <input type="text" name="period_name" placeholder="e.g., DSA, Physics"
+            class="w-full bg-[#131314] border border-gray-700 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
+            required>
+        </div>
+
+        <div>
+          <label class="block text-[10px] text-gray-500 uppercase mb-1">Start Time</label>
+          <input type="time" name="start_time"
+            class="w-full bg-[#131314] border border-gray-700 rounded-lg p-2.5 outline-none" required>
+        </div>
+
+        <div>
+          <label class="block text-[10px] text-gray-500 uppercase mb-1">End Time</label>
+          <input type="time" name="end_time"
+            class="w-full bg-[#131314] border border-gray-700 rounded-lg p-2.5 outline-none" required>
+        </div>
+
+        <button type="submit"
+          class="md:col-span-5 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg transition shadow-lg shadow-blue-900/20 mt-2">
+          Save Period to Weekly Routine
+        </button>
+      </form>
+    </div>
+
+    <div class="bg-[#1c1c1e] rounded-2xl border border-gray-800 overflow-hidden shadow-xl">
+      <table class="w-full text-left border-collapse">
+        <thead class="bg-[#2c2c2e] text-gray-400 text-[11px] uppercase tracking-widest font-bold">
+          <tr>
+            <th class="px-6 py-4">Day</th>
+            <th class="px-6 py-4">Period Name</th>
+            <th class="px-6 py-4">Start Time</th>
+            <th class="px-6 py-4">End Time</th>
+            <th class="px-6 py-4 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-800">
+          {% for p in routine %}
+          <tr class="hover:bg-[#252527] transition">
+            <td class="px-6 py-4 text-gray-400 font-medium">{{ p[1] }}</td>
+            <td class="px-6 py-4 font-bold text-white">{{ p[2] }}</td>
+            <td class="px-6 py-4 text-blue-400 font-mono">{{ p[3] }}</td>
+            <td class="px-6 py-4 text-blue-400 font-mono">{{ p[4] }}</td>
+            <td class="px-6 py-4 text-center">
+              <button onclick="deletePeriod({{ p[0] }})"
+                class="text-red-500 hover:text-red-400 text-sm font-bold bg-red-500/10 px-3 py-1 rounded">Delete</button>
+            </td>
+          </tr>
+          {% endfor %}
+          {% if not routine %}
+          <tr>
+            <td colspan="5" class="px-6 py-10 text-center text-gray-500 italic">No weekly routine set yet.</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    async function deletePeriod(id) {
+      if (confirm('Remove this period from the weekly schedule?')) {
+        const res = await fetch(`/delete_period/${id}`);
+        if (res.ok) window.location.reload();
+      }
+    }
+  </script>
+</body>
+
+</html>

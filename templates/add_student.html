@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
 
 <head>
@@ -71,6 +71,184 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/camera_add_student.js') }}"></script>
+</body>
+
+</html> -->
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AttendIQ | Student Enrollment</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #09090b;
+    }
+
+    .glass-card {
+      background: rgba(24, 24, 27, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .attend-logo {
+      background: linear-gradient(to right, #60a5fa, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .input-field {
+      background: rgba(39, 39, 42, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease;
+    }
+
+    .input-field:focus {
+      border-color: #3b82f6;
+      background: rgba(39, 39, 42, 0.8);
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .video-container {
+      position: relative;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      border: 2px solid rgba(59, 130, 246, 0.3);
+      border-radius: 0.75rem;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body class="text-zinc-200 min-h-screen flex items-center justify-center p-4 md:p-8">
+
+  <div class="w-full max-w-3xl">
+
+    <div class="flex flex-col items-center mb-10">
+      <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/20">
+        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+        </svg>
+      </div>
+      <h1 class="text-4xl font-black attend-logo">AttendIQ</h1>
+      <p class="text-zinc-500 font-bold uppercase tracking-widest text-[10px] mt-2">New Student Enrollment</p>
+    </div>
+
+    <div class="glass-card rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden">
+      <div class="absolute -right-20 -top-20 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10">
+        <div class="mb-8">
+          <h2 class="text-2xl font-extrabold text-white">Biometric Registration</h2>
+          <p class="text-zinc-400 text-sm mt-1">Fill in the details and sync facial signatures.</p>
+        </div>
+
+        <form id="studentForm">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="md:col-span-2">
+              <label class="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1">Full Name</label>
+              <input class="input-field w-full px-5 py-3 rounded-2xl text-white placeholder-zinc-600 font-medium"
+                name="name" placeholder="e.g. John Doe" required>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1">Roll
+                Number</label>
+              <input class="input-field w-full px-5 py-3 rounded-2xl text-white placeholder-zinc-600 font-medium"
+                name="roll" placeholder="e.g. 101">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1">Registration
+                No</label>
+              <input class="input-field w-full px-5 py-3 rounded-2xl text-white placeholder-zinc-600 font-medium"
+                name="reg_no" placeholder="e.g. REG-2024">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1">Semester</label>
+              <input class="input-field w-full px-5 py-3 rounded-2xl text-white placeholder-zinc-600 font-medium"
+                name="class" placeholder="e.g. 5th">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1">Branch /
+                Section</label>
+              <input class="input-field w-full px-5 py-3 rounded-2xl text-white placeholder-zinc-600 font-medium"
+                name="sec" placeholder="e.g. CSE - A">
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-4 justify-center mt-12">
+            <button id="saveInfoBtn" type="submit"
+              class="btn-primary text-white font-bold py-3 px-8 rounded-2xl transition-all transform hover:scale-105 active:scale-95">
+              Save Profile
+            </button>
+            <button id="startCaptureBtn" type="button" disabled
+              class="bg-zinc-800 hover:bg-zinc-700 disabled:opacity-30 disabled:cursor-not-allowed text-yellow-500 font-bold py-3 px-8 rounded-2xl transition-all border border-yellow-500/20">
+              Start Capture (50)
+            </button>
+            <button id="addStudentBtn" type="button" disabled
+              class="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-500 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed font-bold py-3 px-8 rounded-2xl transition-all border border-emerald-500/20">
+              Complete Enrollment
+            </button>
+          </div>
+        </form>
+
+        <div class="my-10 h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent"></div>
+
+        <div class="text-center">
+          <div class="video-container rounded-3xl bg-black inline-block w-full max-w-lg shadow-inner">
+            <video id="video" class="w-full rounded-3xl" autoplay muted></video>
+            <div class="video-overlay"></div>
+          </div>
+
+          <div class="mt-6">
+            <div class="flex justify-between items-center px-2 mb-2">
+              <span id="captureStatus" class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Neural
+                Signatures: 0 / 50</span>
+              <span id="progressText" class="text-blue-500 font-black">0%</span>
+            </div>
+            <div class="w-full bg-zinc-900 rounded-full h-4 p-1 border border-white/5 overflow-hidden">
+              <div id="progressBar"
+                class="bg-gradient-to-r from-blue-600 to-blue-400 h-full w-0 rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-10 text-center">
+          <a href="/"
+            class="text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors">
+            ← Cancel and Return to Dashboard
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
