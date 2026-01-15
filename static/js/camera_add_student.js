@@ -7,6 +7,7 @@ const captureStatus = document.getElementById('captureStatus')
 const progressBar = document.getElementById('progressBar')
 
 let student_id = null
+let student_meta = {} // Store metadata for nested folder creation
 let captured = 0
 const maxImages = 50
 let images = []
@@ -36,7 +37,15 @@ document.getElementById('studentForm').addEventListener('submit', async (e) => {
     }
 
     const j = await res.json()
+
+    // Store data returned from server
     student_id = j.student_id
+    student_meta = {
+      roll: j.roll,
+      semester: j.semester,
+      branch: j.branch,
+    }
+
     alert("Student info saved! Now click 'Start Capture'.")
 
     // UI Updates
@@ -67,7 +76,6 @@ startCaptureBtn.addEventListener('click', async () => {
 
 async function captureImagesLoop() {
   const canvas = document.createElement('canvas')
-  // Wait for video metadata to get correct dimensions
   canvas.width = video.videoWidth || 640
   canvas.height = video.videoHeight || 480
   const ctx = canvas.getContext('2d')
@@ -83,25 +91,36 @@ async function captureImagesLoop() {
     captureStatus.innerHTML = `Captured <span class="text-blue-400 font-bold">${captured}</span> / ${maxImages}`
     progressBar.style.width = `${(captured / maxImages) * 100}%`
 
-    await new Promise((r) => setTimeout(r, 150)) // Faster capture (150ms)
+    await new Promise((r) => setTimeout(r, 150))
   }
 
   // UPLOAD
-  captureStatus.innerText = 'Uploading faces... Please wait.'
+  captureStatus.innerText = 'Uploading faces to nested folders...'
   const form = new FormData()
+
+  // Send metadata so app.py knows where to create the folders
   form.append('student_id', student_id)
+  form.append('roll', student_meta.roll)
+  form.append('semester', student_meta.semester)
+  form.append('branch', student_meta.branch)
+
   images.forEach((b, i) => form.append('images[]', b, `img_${i}.jpg`))
 
-  const resp = await fetch('/upload_face', { method: 'POST', body: form })
-  if (resp.ok) {
-    alert('Facial data uploaded successfully!')
-    addStudentBtn.disabled = false
-    captureStatus.innerText = 'Face Capture Complete ✓'
-  } else {
+  try {
+    const resp = await fetch('/upload_face', { method: 'POST', body: form })
+    if (resp.ok) {
+      alert('Facial data uploaded successfully to the organized directory!')
+      addStudentBtn.disabled = false
+      captureStatus.innerText = 'Face Capture Complete ✓'
+    } else {
+      throw new Error('Upload failed')
+    }
+  } catch (err) {
     alert('Upload failed. Try capturing again.')
     captured = 0
     images = []
     startCaptureBtn.disabled = false
+    progressBar.style.width = '0%'
   }
 
   if (stream) stream.getTracks().forEach((t) => t.stop())
