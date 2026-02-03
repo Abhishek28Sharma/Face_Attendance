@@ -1,121 +1,3 @@
-<!-- <!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Digital Attendance Dashboard</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-
-<body class="bg-[#131314] text-gray-100 min-h-screen font-sans">
-
-  <div class="max-w-6xl mx-auto p-4 md:p-8">
-
-    <nav
-      class="bg-gradient-to-r from-[#1c1c1e] to-blue-900 shadow-xl rounded-2xl px-6 py-4 mb-8 flex flex-col md:flex-row justify-between items-center gap-4 border border-gray-800">
-      <a class="text-xl font-bold tracking-tight text-white" href="/">Digital Attendance</a>
-      <div class="flex flex-wrap justify-center gap-2">
-        <a class="px-4 py-2 text-sm font-medium border border-blue-400 text-blue-400 rounded-lg hover:bg-blue-400 hover:text-white transition duration-200"
-          href="/add_student">Add Student</a>
-        <a class="px-4 py-2 text-sm font-medium border border-purple-400 text-purple-400 rounded-lg hover:bg-purple-400 hover:text-white transition duration-200"
-          href="/set_routine">Set Routine</a>
-        <a class="px-4 py-2 text-sm font-medium border border-blue-400 text-blue-400 rounded-lg hover:bg-blue-400 hover:text-white transition duration-200"
-          href="/mark_attendance">Mark Attendance</a>
-        <a class="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200"
-          href="/attendance_record">Records</a>
-      </div>
-    </nav>
-
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-      <div class="lg:col-span-4 space-y-6">
-        <div class="bg-[#1c1c1e] p-6 rounded-2xl border border-gray-800 shadow-2xl">
-          <h5 class="text-lg font-semibold text-white mb-2">Quick Actions</h5>
-          <p class="text-sm text-gray-400 mb-6">Manage students, college routine, and attendance kiosk.</p>
-
-          <div class="flex flex-col gap-3">
-            <a href="/add_student"
-              class="flex items-center justify-center py-3 bg-blue-600 hover:bg-blue-700 rounded-xl font-medium transition shadow-lg shadow-blue-900/20">
-              Add New Student
-            </a>
-            <a href="/set_routine"
-              class="flex items-center justify-center py-3 bg-purple-600 hover:bg-purple-700 rounded-xl font-medium transition shadow-lg shadow-purple-900/20">
-              Set College Routine
-            </a>
-            <a href="/mark_attendance"
-              class="flex items-center justify-center py-3 bg-emerald-600 hover:bg-emerald-700 rounded-xl font-medium transition shadow-lg shadow-emerald-900/20">
-              Launch Attendance
-            </a>
-            <a href="/view_history"
-              class="flex items-center justify-center py-3 bg-[#2c2c2e] hover:bg-[#3a3a3c] rounded-xl font-medium border border-gray-700 transition">
-              View History
-            </a>
-            <a href="/view_pivot_history"
-              class="flex items-center justify-center py-3 bg-[#2c2c2e] hover:bg-[#3a3a3c] rounded-xl font-medium border border-gray-700 transition">
-              View Subject-wise History
-            </a>
-          </div>
-        </div>
-
-        <div class="bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-2xl text-white shadow-xl">
-          <p class="text-blue-100 text-sm opacity-80 uppercase tracking-widest font-bold">Status</p>
-          <h3 class="text-2xl font-bold mt-1">System Active</h3>
-          <p class="text-xs mt-4 bg-white/20 inline-block px-2 py-1 rounded">Camera: Connected</p>
-        </div>
-      </div>
-
-      <div class="lg:col-span-8 space-y-8">
-
-        <div class="bg-[#1c1c1e] p-6 rounded-2xl border border-gray-800 shadow-2xl">
-          <div class="flex justify-between items-center mb-6">
-            <div>
-              <h5 class="text-lg font-semibold text-white">Train AI Model</h5>
-              <p id="trainMsg" class="text-sm text-gray-500">Updates the recognition database.</p>
-            </div>
-            <button id="trainBtn"
-              class="px-5 py-2 border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white rounded-lg transition font-medium text-sm">
-              Start Training
-            </button>
-          </div>
-
-          <div class="space-y-2">
-            <div class="w-full bg-gray-800 rounded-full h-4 overflow-hidden">
-              <div id="trainProgress"
-                class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full w-0 transition-all duration-500 flex items-center justify-center text-[10px] font-bold text-white uppercase">
-                0%
-              </div>
-            </div>
-            <div class="flex justify-between text-[10px] text-gray-600 uppercase font-bold tracking-widest">
-              <span>Ready</span>
-              <span>Complete</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-[#1c1c1e] p-6 rounded-2xl border border-gray-800 shadow-2xl">
-          <h5 class="text-lg font-semibold text-white mb-6">Attendance Trends (Last 30 days)</h5>
-          <div class="h-[320px] w-full">
-            <canvas id="attendanceChart"></canvas>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <script src="static/js/dashboard.js"></script>
-
-  <script>
-    Chart.defaults.color = '#9ca3af';
-    Chart.defaults.borderColor = '#374151';
-  </script>
-</body>
-
-</html> -->
-
 <!doctype html>
 <html lang="en">
 
@@ -207,52 +89,52 @@
       <div class="lg:col-span-4 space-y-6">
 
         <div class="glass-card p-8 rounded-[2.5rem] bg-gradient-to-br from-zinc-900/50 to-blue-900/10">
-          <p class="text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4">Live Session</p>
+          <p class="text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4">Core Engine</p>
           <h4 id="activePeriodDisplay" class="text-3xl font-black text-white mb-2 italic">Scanning...</h4>
           <div class="flex items-center gap-2 mb-6">
             <span class="w-2 h-2 bg-emerald-500 rounded-full status-pulse"></span>
-            <span class="text-xs font-bold text-zinc-500">Current Period Active</span>
+            <span class="text-xs font-bold text-zinc-500">System Live & Validating</span>
           </div>
 
-          <div class="space-y-3">
-            <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center">
-              <span class="text-xs text-zinc-400">Total Students</span>
-              <span class="text-lg font-bold text-white">00</span>
-            </div>
-            <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center">
-              <span class="text-xs text-zinc-400">Present</span>
-              <span class="text-lg font-bold text-emerald-400">00</span>
-            </div>
+          <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center">
+            <span class="text-xs text-zinc-400 font-bold uppercase tracking-wider">Multi-Cam Rules</span>
+            <span class="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-2 py-1 rounded">Enforced</span>
           </div>
         </div>
 
         <div class="glass-card p-8 rounded-[2.5rem]">
-          <h5 class="text-sm font-bold text-zinc-500 uppercase tracking-widest mb-6">Management</h5>
+          <h5 class="text-sm font-bold text-zinc-500 uppercase tracking-widest mb-6">Administration</h5>
           <div class="space-y-3">
-            <a href="/add_student"
+            <a href="/control_panel"
+              class="flex items-center justify-between p-4 bg-zinc-800/40 hover:bg-indigo-600 group rounded-3xl transition-all">
+              <span class="font-bold group-hover:text-white">Control Panel</span>
+              <svg class="w-5 h-5 text-indigo-500 group-hover:text-white" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                </path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+            </a>
+            <a href="/manage_students"
               class="flex items-center justify-between p-4 bg-zinc-800/40 hover:bg-blue-600 group rounded-3xl transition-all">
-              <span class="font-bold group-hover:text-white">Enroll Student</span>
+              <span class="font-bold group-hover:text-white">Student Directory</span>
               <svg class="w-5 h-5 text-blue-500 group-hover:text-white" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                </path>
               </svg>
             </a>
             <a href="/view_history"
               class="flex items-center justify-between p-4 bg-zinc-800/40 hover:bg-purple-600 group rounded-3xl transition-all">
-              <span class="font-bold group-hover:text-white">Fines & Analytics</span>
+              <span class="font-bold group-hover:text-white">Fine Analytics</span>
               <svg class="w-5 h-5 text-purple-500 group-hover:text-white" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
                 </path>
-              </svg>
-            </a>
-            <a href="/view_pivot_history"
-              class="flex items-center justify-between p-4 bg-zinc-800/40 hover:bg-zinc-700 group rounded-3xl transition-all">
-              <span class="font-bold group-hover:text-white text-zinc-400">Subject Pivot</span>
-              <svg class="w-5 h-5 text-zinc-600 group-hover:text-white" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
               </svg>
             </a>
           </div>
@@ -264,12 +146,12 @@
         <div class="glass-card p-10 rounded-[2.5rem] relative overflow-hidden border-blue-500/20">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-10">
             <div>
-              <h5 class="text-3xl font-black text-white mb-2">AttendIQ Neural Engine</h5>
-              <p class="text-zinc-500 font-medium">Synchronize local facial signatures with core database.</p>
+              <h5 class="text-3xl font-black text-white mb-2">Neural Engine Optimization</h5>
+              <p class="text-zinc-500 font-medium">Calibrate AI signatures for multi-cam branch validation.</p>
             </div>
             <button id="trainBtn"
               class="flex items-center gap-3 px-8 py-4 bg-white text-black font-black rounded-2xl hover:bg-blue-600 hover:text-white transition-all transform hover:scale-105 active:scale-95">
-              <span>Sync Model</span>
+              <span>Sync AI Model</span>
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                   d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
@@ -280,8 +162,8 @@
 
           <div class="space-y-6">
             <div class="flex justify-between items-end">
-              <span id="trainMsg" class="text-xs font-bold uppercase tracking-widest text-zinc-500">Ready to
-                train</span>
+              <span id="trainMsg" class="text-xs font-bold uppercase tracking-widest text-zinc-500">Ready for
+                sync</span>
               <span class="text-3xl font-black text-blue-500"><span id="trainProgressVal">0</span>%</span>
             </div>
             <div class="w-full bg-zinc-800 rounded-2xl h-6 p-1.5">
@@ -292,42 +174,33 @@
           </div>
         </div>
 
-        <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="glass-card p-8 rounded-[2.5rem]">
-            <h5 class="text-xl font-bold text-white mb-6">Today's Timeline</h5>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div
+            class="glass-card p-8 rounded-[2.5rem] border-indigo-500/20 bg-gradient-to-br from-indigo-900/10 to-transparent">
+            <h5 class="text-xl font-bold text-white mb-6">Camera Rules</h5>
             <div class="space-y-4">
-              <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border-l-4 border-blue-500">
-                <div>
-                  <p class="text-xs font-bold text-zinc-500">09:00 - 10:00</p>
-                  <p class="text-sm font-bold text-white">Advanced Mathematics</p>
-                </div>
+              <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-white/5">
+                <span class="text-sm font-semibold text-zinc-400">Assignment Logic</span>
+                <span
+                  class="px-3 py-1 bg-indigo-500/10 text-indigo-400 text-[10px] font-bold rounded-lg uppercase">Dynamic</span>
               </div>
-              <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border-l-4 border-zinc-700 opacity-50">
-                <div>
-                  <p class="text-xs font-bold text-zinc-500">10:00 - 11:00</p>
-                  <p class="text-sm font-bold text-white">Database Systems</p>
-                </div>
-              </div>
+              <p class="text-xs text-zinc-500 italic px-2">Update camera-to-branch mappings instantly via the Control
+                Panel.</p>
             </div>
           </div>
 
-          <div class="glass-card p-8 rounded-[2.5rem] bg-gradient-to-br from-zinc-900 to-black border-emerald-500/20">
-            <h5 class="text-xl font-bold text-white mb-6">Attendance Summary</h5>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="p-6 bg-white/5 rounded-3xl text-center">
-                <p class="text-3xl font-black text-white">0%</p>
-                <p class="text-[10px] font-bold text-zinc-500 uppercase mt-2">Avg. Presence</p>
-              </div>
-              <div class="p-6 bg-white/5 rounded-3xl text-center">
-                <p class="text-3xl font-black text-white">0</p>
-                <p class="text-[10px] font-bold text-zinc-500 uppercase mt-2">Total Fine</p>
-              </div>
-            </div>
-            <div class="mt-6 p-4 bg-emerald-500/10 rounded-2xl text-center">
-              <p class="text-xs font-bold text-emerald-500 uppercase tracking-widest">No Fines Pending</p>
+          <div class="glass-card p-8 rounded-[2.5rem] bg-gradient-to-br from-blue-900/10 to-transparent">
+            <h5 class="text-xl font-bold text-white mb-2">Departmental Data</h5>
+            <p class="text-sm text-zinc-500 mb-6">Organize faculty and students by branch and semester.</p>
+            <div class="flex gap-3">
+              <a href="/control_panel"
+                class="px-4 py-2 bg-zinc-800 hover:bg-indigo-600 rounded-xl text-xs font-bold transition-all">Assign
+                Cameras</a>
+              <a href="/manage_students"
+                class="px-4 py-2 bg-zinc-800 hover:bg-blue-600 rounded-xl text-xs font-bold transition-all">Directory</a>
             </div>
           </div>
-        </div> -->
+        </div>
 
       </div>
     </div>
@@ -335,7 +208,6 @@
 
   <script src="static/js/dashboard.js"></script>
   <script>
-    // Fetch active period to update Live Session card
     async function updatePeriod() {
       try {
         const res = await fetch('/get_active_period_name');

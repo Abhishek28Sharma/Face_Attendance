@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>AttendIQ | Manage Students</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #09090b;
+    }
+  </style>
+</head>
+
+<body class="text-zinc-200 p-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-10">
+      <h2 class="text-3xl font-extrabold text-white">Student Management</h2>
+      <form action="/manage_students" method="GET"
+        class="flex gap-3 bg-zinc-900/50 p-2 rounded-2xl border border-white/5">
+        <select name="branch" class="bg-transparent px-4 py-2 text-sm outline-none border-r border-white/10">
+          <option value="CSE" {% if branch=='CSE' %}selected{% endif %}>CSE</option>
+          <option value="BCA" {% if branch=='BCA' %}selected{% endif %}>BCA</option>
+        </select>
+        <select name="semester" class="bg-transparent px-4 py-2 text-sm outline-none">
+          {% for sem in ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"] %}
+          <option value="{{ sem }}" {% if semester==sem %}selected{% endif %}>{{ sem }} Sem</option>
+          {% endfor %}
+        </select>
+        <button type="submit"
+          class="bg-blue-600 px-6 py-2 rounded-xl text-sm font-bold hover:bg-blue-500 transition-all">Filter</button>
+      </form>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for s in students %}
+      <div class="bg-zinc-900/40 p-6 rounded-[2rem] border border-white/5 flex justify-between items-center">
+        <div>
+          <p class="text-blue-500 font-bold text-[10px] uppercase tracking-widest">{{ s[2] }} | {{ s[4] }}</p>
+          <h3 class="text-lg font-bold text-white mt-1">{{ s[1] }}</h3>
+          <p class="text-zinc-500 text-xs mt-1 italic">Reg: {{ s[5] }}</p>
+        </div>
+        <div class="flex flex-col gap-3">
+          <button onclick="deleteStudent({{ s[0] }})" class="text-red-500 hover:text-red-400 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script>
+    async function deleteStudent(id) {
+      if (confirm("Permanently delete this student and all facial data?")) {
+        const res = await fetch(`/delete_student/${id}`, { method: 'POST' });
+        if (res.ok) window.location.reload();
+      }
+    }
+  </script>
+</body>
+
+</html>
