@@ -19,7 +19,7 @@ A real-time face recognition–based attendance system using **MediaPipe**, **Ra
 
 ---
 
-## 6. Face Detection Methodology
+## Face Detection Methodology
 
 ### MediaPipe Face Detection
 
