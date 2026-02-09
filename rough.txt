@@ -1,2 +1,14 @@
-tommorror plan:- camera option attendance
-save student details based on thier semster and branch
+routing is not working
+train data is not working
+dropdown is not working
+progress bar is not working
+fixing check all student present without fine Calculation
+
+
+
+08/02/2026
+
+1. set routine based on branch
+2. Filter in student Directory
+3. show fine deatils based on thier branches
+4. in pivot history add filter option

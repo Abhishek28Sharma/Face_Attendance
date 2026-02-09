@@ -95,8 +95,19 @@
   <script>
     async function deletePeriod(id) {
       if (confirm('Remove this period from the weekly schedule?')) {
-        const res = await fetch(`/delete_period/${id}`);
-        if (res.ok) window.location.reload();
+        // Sending a POST request to match the backend security route
+        const res = await fetch(`/delete_period/${id}`, {
+          method: 'POST'
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          // Refresh the page to show the updated routine
+          window.location.reload();
+        } else {
+          alert("Error deleting period: " + (data.error || "Unknown error"));
+        }
       }
     }
   </script>

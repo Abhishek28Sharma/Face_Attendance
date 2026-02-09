@@ -4,81 +4,257 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mark Attendance | Live Kiosk</title>
+  <title>AttendIQ | Live Attendance Kiosk</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #09090b;
+    }
+
+    .glass-card {
+      background: rgba(24, 24, 27, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .attend-logo {
+      background: linear-gradient(to right, #60a5fa, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .status-pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+      }
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 10px;
+    }
+
+    /* Animation for new list items */
+    .fade-in-up {
+      animation: fadeInUp 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 
-<body class="bg-[#131314] text-gray-100 min-h-screen p-4 md:p-8">
+<body class="text-zinc-200 min-h-screen p-4 md:p-8">
   <audio id="successSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"
     preload="auto"></audio>
-  <div class="max-w-6xl mx-auto">
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-      <div class="bg-[#1c1c1e] border border-gray-800 p-4 rounded-xl flex items-center justify-between">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div class="glass-card p-6 rounded-3xl flex items-center justify-between border-blue-500/20">
         <div>
-          <p class="text-[10px] uppercase text-gray-500 font-bold tracking-widest">Current Time</p>
-          <h2 id="liveClock" class="text-2xl font-mono text-white">00:00:00</h2>
+          <p class="text-[10px] uppercase text-zinc-500 font-black tracking-widest mb-1">Current Time</p>
+          <h2 id="liveClock" class="text-2xl font-black text-white italic">00:00:00</h2>
         </div>
-        <div class="text-blue-500">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <div class="w-10 h-10 bg-blue-600/20 rounded-xl flex items-center justify-center text-blue-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2.5"></path>
           </svg>
         </div>
       </div>
 
-      <div class="bg-[#1c1c1e] border border-gray-800 p-4 rounded-xl flex items-center justify-between">
+      <div class="glass-card p-6 rounded-3xl flex items-center justify-between border-purple-500/20">
         <div>
-          <p class="text-[10px] uppercase text-gray-500 font-bold tracking-widest">Active Session</p>
-          <h2 id="activePeriodDisplay" class="text-xl font-bold text-blue-400">Detecting...</h2>
+          <p class="text-[10px] uppercase text-zinc-500 font-black tracking-widest mb-1">Active Session</p>
+          <h2 id="activePeriodDisplay" class="text-xl font-bold text-purple-400">Detecting...</h2>
         </div>
-        <div class="text-green-500">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        <div class="w-10 h-10 bg-purple-600/20 rounded-xl flex items-center justify-center text-purple-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2-0 002-2V7a2 2-0 00-2-2H5a2 2-0 00-2 2v12a2 2-0 002 2z"
+              stroke-width="2.5"></path>
           </svg>
         </div>
       </div>
+      <!-- 
+      <div class="glass-card p-6 rounded-3xl flex items-center justify-between border-emerald-500/20">
+       <div class="flex-grow">
+          <p class="text-[10px] uppercase text-zinc-500 font-black tracking-widest mb-2">Unit Identifier</p>
+          <select id="cameraSelector" class="w-full bg-zinc-800 border border-white/5 rounded-xl px-3 py-2 text-sm font-bold text-emerald-400 outline-none focus:border-emerald-500 transition-all appearance-none cursor-pointer">
+            <option value="1">Camera Unit 01</option>
+            <option value="2">Camera Unit 02</option>
+            <option value="3">Camera Unit 03</option>
+            <option value="4">Camera Unit 04</option>
+          </select>
+        </div> 
+        <div class="ml-4 w-10 h-10 bg-emerald-600/20 rounded-xl flex items-center justify-center text-emerald-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              stroke-width="2.5"></path>
+          </svg>
+        </div>
+      </div> -->
     </div>
 
-    <div class="bg-[#1c1c1e] rounded-2xl shadow-2xl border border-gray-800 p-6 md:p-8">
-      <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+    <div class="glass-card rounded-[2.5rem] p-6 md:p-10 relative overflow-hidden">
+      <div class="absolute -right-20 -top-20 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
         <div>
-          <h4 class="text-2xl font-bold text-white tracking-tight">AI Kiosk Mode</h4>
-          <p class="text-sm text-gray-400">Automatic period detection active. Just look at the camera.</p>
+          <h1 class="text-3xl font-black text-white italic tracking-tight mb-1">AttendIQ <span
+              class="text-blue-500">Kiosk</span></h1>
+          <p class="text-zinc-500 text-sm font-medium">Neural validation engine is active and ready.</p>
         </div>
         <div class="flex items-center gap-3">
           <a href="/"
-            class="px-4 py-2 border border-gray-700 hover:bg-gray-800 text-gray-300 rounded-lg text-sm flex items-center gap-2">Back</a>
+            class="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-2xl font-bold text-sm transition-all border border-white/5">Dashboard</a>
           <button id="startMarkBtn"
-            class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold">Start Kiosk</button>
-          <button id="stopMarkBtn" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold"
+            class="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-sm transition-all shadow-lg shadow-blue-500/20 status-pulse">Start
+            Kiosk</button>
+          <button id="stopMarkBtn"
+            class="px-8 py-3 bg-zinc-800 text-zinc-500 rounded-2xl font-black text-sm cursor-not-allowed border border-white/5"
             disabled>Stop</button>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div class="lg:col-span-7 flex flex-col items-center">
-          <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border-2 border-gray-800">
-            <video id="markVideo" class="w-full h-full object-cover" autoplay muted></video>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div class="lg:col-span-7">
+          <div
+            class="relative w-full aspect-video bg-black rounded-[2rem] overflow-hidden border-2 border-zinc-800 shadow-inner group">
+            <video id="markVideo" class="w-full h-full object-cover grayscale-[0.1]" autoplay muted></video>
+
+            <div id="scanLine"
+              class="hidden absolute top-0 left-0 w-full h-1 bg-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.5)] z-10">
+            </div>
+
             <div
-              class="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-4 py-1 rounded-full border border-white/10 text-xs">
-              Status: <span id="markStatus" class="text-blue-400">Waiting...</span>
+              class="absolute bottom-6 left-6 right-6 bg-black/40 backdrop-blur-xl p-4 rounded-2xl border border-white/10 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div id="liveIndicator" class="w-2 h-2 bg-zinc-600 rounded-full"></div>
+                <span class="text-[10px] font-black uppercase tracking-widest text-white">System Status</span>
+              </div>
+              <span id="markStatus" class="text-xs font-bold text-blue-400">Standby</span>
             </div>
           </div>
         </div>
 
-        <div class="lg:col-span-5 flex flex-col h-full">
-          <h6 class="text-sm font-bold text-gray-400 uppercase mb-4">Live Logs</h6>
-          <div class="flex-grow bg-[#131314] rounded-xl border border-gray-800 overflow-hidden">
-            <ul id="recognizedList" class="divide-y divide-gray-800 max-h-[400px] overflow-y-auto custom-scrollbar">
-              <li class="p-8 text-center text-gray-600 italic text-sm">No students detected yet...</li>
+        <div class="lg:col-span-5 flex flex-col">
+          <div class="flex justify-between items-center mb-4 px-2">
+            <h6 class="text-xs font-black text-zinc-500 uppercase tracking-[0.2em]">Live Stream Results</h6>
+            <span id="presentCount" class="text-[10px] font-bold bg-blue-500/10 text-blue-400 px-2 py-1 rounded">0
+              PRESENT</span>
+          </div>
+          <div class="flex-grow bg-black/40 rounded-[2rem] border border-white/5 overflow-hidden">
+            <ul id="recognizedList" class="divide-y divide-white/5 h-[380px] overflow-y-auto custom-scrollbar">
+              <li class="p-12 text-center text-zinc-600 italic text-sm">Awaiting neural detection...</li>
             </ul>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    // 1. Clock Logic
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-GB');
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 2. Active Period Polling
+    async function pollActivePeriod() {
+      try {
+        const res = await fetch('/get_active_period_name');
+        const data = await res.json();
+        const display = document.getElementById('activePeriodDisplay');
+        display.textContent = data.period;
+
+        if (data.period === "Free Period") {
+          display.className = "text-xl font-bold text-zinc-500";
+        } else {
+          display.className = "text-xl font-bold text-purple-400";
+        }
+      } catch (e) { console.error("Routine fetch failed"); }
+    }
+    setInterval(pollActivePeriod, 10000);
+    pollActivePeriod();
+
+    // 3. UI Status Management (To be called by camera_mark.js)
+    function updateKioskUI(isActive) {
+      const startBtn = document.getElementById('startMarkBtn');
+      const stopBtn = document.getElementById('stopMarkBtn');
+      const indicator = document.getElementById('liveIndicator');
+      const scanLine = document.getElementById('scanLine');
+
+      if (isActive) {
+        startBtn.disabled = true;
+        startBtn.className = "px-8 py-3 bg-zinc-800 text-zinc-500 rounded-2xl font-black text-sm cursor-not-allowed border border-white/5";
+        stopBtn.disabled = false;
+        stopBtn.className = "px-8 py-3 bg-red-600/20 text-red-500 hover:bg-red-600 hover:text-white rounded-2xl font-black text-sm transition-all border border-red-500/20";
+        indicator.className = "w-2 h-2 bg-emerald-500 rounded-full animate-ping";
+        scanLine.classList.remove('hidden');
+        scanLine.style.animation = "scan 3s linear infinite";
+      } else {
+        startBtn.disabled = false;
+        startBtn.className = "px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-sm transition-all shadow-lg shadow-blue-500/20 status-pulse";
+        stopBtn.disabled = true;
+        stopBtn.className = "px-8 py-3 bg-zinc-800 text-zinc-500 rounded-2xl font-black text-sm cursor-not-allowed border border-white/5";
+        indicator.className = "w-2 h-2 bg-zinc-600 rounded-full";
+        scanLine.classList.add('hidden');
+      }
+    }
+  </script>
+
+  <style>
+    @keyframes scan {
+      0% {
+        top: 0;
+      }
+
+      50% {
+        top: 100%;
+      }
+
+      100% {
+        top: 0;
+      }
+    }
+  </style>
 
   <script src="{{ url_for('static', filename='js/camera_mark.js') }}"></script>
 </body>

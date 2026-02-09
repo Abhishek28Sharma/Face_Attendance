@@ -5,6 +5,7 @@ const addStudentBtn = document.getElementById('addStudentBtn')
 const video = document.getElementById('video')
 const captureStatus = document.getElementById('captureStatus')
 const progressBar = document.getElementById('progressBar')
+const progressText = document.getElementById('progressText') // Added for percentage text
 
 let student_id = null
 let captured = 0
@@ -12,10 +13,10 @@ const maxImages = 50
 let images = []
 let stream = null
 
+// 1. SAVE STUDENT INFO
 document.getElementById('studentForm').addEventListener('submit', async (e) => {
   e.preventDefault()
 
-  // Disable button to prevent double clicks
   saveInfoBtn.disabled = true
   saveInfoBtn.innerText = 'Saving...'
 
@@ -23,90 +24,109 @@ document.getElementById('studentForm').addEventListener('submit', async (e) => {
 
   try {
     const res = await fetch('/add_student', { method: 'POST', body: fd })
-
-    if (!res.ok) {
-      const errorData = await res.json()
-      console.error('Server Error:', errorData)
-      alert(
-        'Failed to save student info: ' + (errorData.error || 'Unknown error')
-      )
-      saveInfoBtn.disabled = false
-      saveInfoBtn.innerText = 'Save Info'
-      return
-    }
-
     const j = await res.json()
-    student_id = j.student_id
-    alert("Student info saved! Now click 'Start Capture'.")
 
-    // UI Updates
-    startCaptureBtn.disabled = false
-    saveInfoBtn.classList.add('opacity-50', 'cursor-not-allowed')
-    saveInfoBtn.innerText = 'Saved ✓'
+    if (res.ok && j.student_id) {
+      student_id = j.student_id
+      alert('Profile Created! You can now start face capture.')
+
+      // UI Transition
+      startCaptureBtn.disabled = false
+      saveInfoBtn.innerText = 'Profile Saved ✓'
+      saveInfoBtn.classList.add('opacity-50', 'cursor-not-allowed')
+    } else {
+      throw new Error(j.error || 'Database insertion failed')
+    }
   } catch (err) {
-    console.error('Fetch Error:', err)
-    alert('Connection error. Is the server running?')
+    console.error('Error:', err)
+    alert('Error saving info: ' + err.message)
     saveInfoBtn.disabled = false
+    saveInfoBtn.innerText = 'Save Profile'
   }
 })
 
+// 2. START CAMERA
 startCaptureBtn.addEventListener('click', async () => {
+  if (!student_id) {
+    alert('Please save student info first!')
+    return
+  }
+
   startCaptureBtn.disabled = true
   try {
     stream = await navigator.mediaDevices.getUserMedia({
       video: { width: 640, height: 480 },
     })
     video.srcObject = stream
-    await video.play()
-    captureImagesLoop()
+
+    // Wait for video to be ready before starting loop
+    video.onloadedmetadata = () => {
+      video.play()
+      captureImagesLoop()
+    }
   } catch (err) {
     alert('Camera access error: ' + err.message)
     startCaptureBtn.disabled = false
   }
 })
 
+// 3. CAPTURE LOOP
 async function captureImagesLoop() {
   const canvas = document.createElement('canvas')
-  // Wait for video metadata to get correct dimensions
-  canvas.width = video.videoWidth || 640
-  canvas.height = video.videoHeight || 480
+  canvas.width = video.videoWidth
+  canvas.height = video.videoHeight
   const ctx = canvas.getContext('2d')
 
   while (captured < maxImages) {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+
     const blob = await new Promise((res) =>
-      canvas.toBlob(res, 'image/jpeg', 0.8)
+      canvas.toBlob(res, 'image/jpeg', 0.8),
     )
     images.push(blob)
     captured++
 
-    captureStatus.innerHTML = `Captured <span class="text-blue-400 font-bold">${captured}</span> / ${maxImages}`
-    progressBar.style.width = `${(captured / maxImages) * 100}%`
+    // Update Progress UI
+    const percent = Math.round((captured / maxImages) * 100)
+    captureStatus.innerHTML = `Signatures: <span class="text-blue-400 font-bold">${captured}</span> / ${maxImages}`
+    if (progressBar) progressBar.style.width = `${percent}%`
+    if (progressText) progressText.innerText = `${percent}%`
 
-    await new Promise((r) => setTimeout(r, 150)) // Faster capture (150ms)
+    await new Promise((r) => setTimeout(r, 100)) // 10 frames per second
   }
 
-  // UPLOAD
-  captureStatus.innerText = 'Uploading faces... Please wait.'
+  uploadFaces()
+}
+
+// 4. UPLOAD DATA
+async function uploadFaces() {
+  captureStatus.innerText = 'Syncing signatures with server...'
+
   const form = new FormData()
   form.append('student_id', student_id)
-  images.forEach((b, i) => form.append('images[]', b, `img_${i}.jpg`))
+  images.forEach((b, i) => form.append('images[]', b, `face_${i}.jpg`))
 
-  const resp = await fetch('/upload_face', { method: 'POST', body: form })
-  if (resp.ok) {
-    alert('Facial data uploaded successfully!')
-    addStudentBtn.disabled = false
-    captureStatus.innerText = 'Face Capture Complete ✓'
-  } else {
-    alert('Upload failed. Try capturing again.')
+  try {
+    const resp = await fetch('/upload_face', { method: 'POST', body: form })
+    if (resp.ok) {
+      captureStatus.innerText = 'Face Capture Complete ✓'
+      if (addStudentBtn) addStudentBtn.disabled = false
+      alert('Facial data synced successfully!')
+    } else {
+      throw new Error('Upload failed')
+    }
+  } catch (err) {
+    alert('Upload Error. Please restart capture.')
     captured = 0
     images = []
     startCaptureBtn.disabled = false
+  } finally {
+    if (stream) stream.getTracks().forEach((t) => t.stop())
   }
-
-  if (stream) stream.getTracks().forEach((t) => t.stop())
 }
 
-addStudentBtn.addEventListener('click', () => {
-  window.location.href = '/'
-})
+if (addStudentBtn) {
+  addStudentBtn.addEventListener('click', () => {
+    window.location.href = '/manage_students' // Redirect to directory instead of home
+  })
+}

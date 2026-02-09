@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>AttendIQ | Control Panel</title>
+  <title>AttendIQ | Department Manager</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap"
     rel="stylesheet">
@@ -11,84 +11,69 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #09090b;
     }
+
+    .glass-card {
+      background: rgba(24, 24, 27, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
   </style>
 </head>
 
 <body class="text-zinc-200 p-8">
-  <div class="max-w-5xl mx-auto space-y-10">
+  <div class="max-w-4xl mx-auto space-y-10">
     <div class="flex justify-between items-center">
-      <h2 class="text-3xl font-black bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">System
+      <h2 class="text-3xl font-black bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">Program
         Control Panel</h2>
       <a href="/" class="text-zinc-500 hover:text-white transition text-sm font-bold">← Dashboard</a>
     </div>
 
-    <div class="bg-zinc-900/40 border border-white/5 p-8 rounded-[2.5rem] backdrop-blur-xl">
-      <h5 class="text-xl font-bold mb-6 flex items-center gap-2 text-white">
+    <div class="glass-card p-8 rounded-[2.5rem]">
+      <h5 class="text-xl font-bold mb-6 text-white flex items-center gap-2">
         <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round" />
         </svg>
-        Add New Department/Branch
+        Register Branch & Semesters
       </h5>
       <form action="/control_panel" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <input type="hidden" name="action" value="add_branch">
-        <input type="text" name="branch_name" placeholder="Branch Name (e.g. MECH)"
+        <input type="text" name="branch_name" placeholder="e.g. CSE"
           class="bg-zinc-800 p-4 rounded-2xl outline-none border border-white/5 focus:border-blue-500 transition"
           required>
         <input type="number" name="total_sems" placeholder="Total Semesters"
           class="bg-zinc-800 p-4 rounded-2xl outline-none border border-white/5 focus:border-blue-500 transition"
           required>
-        <button
-          class="bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black uppercase text-xs tracking-widest text-white shadow-lg shadow-blue-900/20">Register
-          Branch</button>
+        <button type="submit"
+          class="bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest text-white transition-all shadow-lg shadow-blue-900/20">Add
+          Program</button>
       </form>
     </div>
 
-    <div class="bg-zinc-900/40 border border-white/5 p-8 rounded-[2.5rem] backdrop-blur-xl">
-      <h5 class="text-xl font-bold mb-6 flex items-center gap-2 text-white">
-        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-            stroke-width="2" stroke-linecap="round" />
-        </svg>
-        Camera Assignment Engine
-      </h5>
-      <form action="/control_panel" method="POST" class="space-y-6">
-        <input type="hidden" name="action" value="assign_camera">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <input type="text" name="camera_id" placeholder="Camera ID (e.g. 1)"
-            class="bg-zinc-800 p-4 rounded-2xl outline-none border border-white/5 focus:border-indigo-500 transition"
-            required>
-          <select name="branch"
-            class="bg-zinc-800 p-4 rounded-2xl outline-none border border-white/5 focus:border-indigo-500 transition">
-            {% for b in branches %}
-            <option value="{{ b[1] }}">{{ b[1] }}</option>
-            {% endfor %}
-          </select>
-          <input type="text" name="sem_range" placeholder="Sems (e.g. 1st,2nd)"
-            class="bg-zinc-800 p-4 rounded-2xl outline-none border border-white/5 focus:border-indigo-500 transition"
-            required>
-        </div>
-        <button
-          class="w-full bg-gradient-to-r from-indigo-600 to-blue-700 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] text-white shadow-xl">Apply
-          Mapping Rules</button>
-      </form>
-
-      <div class="mt-10 overflow-hidden rounded-2xl border border-white/5">
+    <div class="glass-card p-8 rounded-[2.5rem]">
+      <h5 class="text-xl font-bold mb-6 text-white">Active Programs Directory</h5>
+      <div class="overflow-hidden rounded-2xl border border-white/5 bg-black/20">
         <table class="w-full text-left text-sm">
           <thead class="bg-zinc-800/50 text-zinc-500 uppercase text-[10px] font-bold tracking-widest">
             <tr>
-              <th class="p-4">Camera ID</th>
-              <th class="p-4">Assigned Branch</th>
-              <th class="p-4">Semesters</th>
+              <th class="p-4">Branch Name</th>
+              <th class="p-4">Semester Configuration</th>
+              <th class="p-4 text-right">Action</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-white/5">
-            {% for config in configs %}
+            {% for b in branches %}
             <tr class="hover:bg-white/5 transition">
-              <td class="p-4 font-black text-blue-400">Unit-{{ config[0] }}</td>
-              <td class="p-4 font-bold">{{ config[1] }}</td>
-              <td class="p-4"><span class="bg-zinc-800 px-3 py-1 rounded-lg border border-white/5 text-zinc-400">{{
-                  config[2] }}</span></td>
+              <td class="p-4 font-bold text-white">{{ b[1] }}</td>
+              <td class="p-4 font-medium text-zinc-400">{{ b[2] }} Semesters Total</td>
+              <td class="p-4 text-right">
+                <form action="/control_panel" method="POST"
+                  onsubmit="return confirm('Remove this branch? This will affect student registration.');">
+                  <input type="hidden" name="action" value="delete_branch">
+                  <input type="hidden" name="branch_id" value="{{ b[0] }}">
+                  <button type="submit"
+                    class="text-red-500 hover:text-red-400 font-bold text-xs uppercase tracking-tighter">Remove</button>
+                </form>
+              </td>
             </tr>
             {% endfor %}
           </tbody>

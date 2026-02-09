@@ -2,72 +2,154 @@
 <html lang="en">
 
 <head>
-  <title>Subject-wise Attendance</title>
+  <meta charset="utf-8" />
+  <title>AttendIQ | Subject-wise Matrix</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #09090b;
+    }
+
+    .glass-card {
+      background: rgba(24, 24, 27, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      cursor: pointer;
+    }
+
+    @media print {
+      body {
+        background-color: white;
+        color: black;
+        padding: 0;
+      }
+
+      .glass-card {
+        background: white;
+        border: 1px solid #ddd;
+        backdrop-filter: none;
+        box-shadow: none;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .text-white {
+        color: black !important;
+      }
+
+      .text-zinc-500 {
+        color: #666 !important;
+      }
+
+      .border-white\/10 {
+        border-color: #eee !important;
+      }
+
+      .bg-blue-600\/5 {
+        background-color: #f8fafc !important;
+      }
+    }
+  </style>
 </head>
 
-<body class="bg-[#131314] text-gray-100 p-8">
-  <div class="max-w-6xl mx-auto">
-    <div class="flex justify-between items-center mb-8">
+<body class="text-zinc-200 p-4 md:p-8">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
       <div>
         <div class="flex items-center gap-4 mb-2">
-          <a href="/" class="text-xs bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-md transition">← Dashboard</a>
-          <h2 class="text-2xl font-bold">Attendance Report</h2>
+          <a href="/"
+            class="no-print text-[10px] font-bold bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-xl transition uppercase tracking-widest text-zinc-400">←
+            Dashboard</a>
+          <h2 class="text-3xl font-black text-white italic">Neural <span class="text-blue-500">Matrix</span></h2>
         </div>
-        <p class="text-blue-400 font-mono">Date: {{ current_date }}</p>
+        <p class="text-zinc-500 text-sm font-bold uppercase tracking-tighter">
+          Snapshot: <span class="text-blue-400">{{ target_date }} {{ target_month }} {{ target_year }}</span>
+        </p>
       </div>
 
-      <form class="flex gap-2 items-end">
-        <div>
-          <label class="block text-[10px] uppercase text-gray-500 mb-1">Select Date</label>
-          <input type="date" id="datePicker" class="bg-[#1c1c1e] border border-gray-700 p-2 rounded text-sm text-white">
+      <div class="flex flex-wrap gap-3 items-end no-print">
+        <div class="glass-card p-4 rounded-[2rem] flex gap-3 items-end">
+          <div class="space-y-1">
+            <label class="block text-[10px] font-black uppercase text-zinc-500 tracking-widest ml-2">Select Date</label>
+            <input type="date" id="datePicker"
+              class="bg-zinc-900 border border-white/5 p-3 rounded-2xl text-sm text-white outline-none focus:border-blue-500 transition">
+          </div>
+          <button type="button" onclick="filterDate()"
+            class="bg-zinc-800 hover:bg-zinc-700 px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all">Update</button>
         </div>
-        <button type="button" onclick="filterDate()"
-          class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-bold transition">View</button>
-      </form>
+        <button onclick="window.print()"
+          class="bg-blue-600 hover:bg-blue-500 px-8 py-7 rounded-[2rem] text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M17 17h2a2 2-0 002-2v-4a2 2-0 00-2-2H5a2 2-0 00-2 2v4a2 2-0 002 2h2m2 4h6a2 2-0 002-2v-4a2 2-0 00-2-2H9a2 2-0 00-2 2v4a2 2-0 002 2zm8-12V5a2 2-0 00-2-2H9a2 2-0 00-2 2v4h10z"
+              stroke-width="2"></path>
+          </svg>
+          Export PDF
+        </button>
+      </div>
     </div>
 
-    <div class="bg-[#1c1c1e] rounded-2xl border border-gray-800 overflow-hidden shadow-2xl">
-      <table class="w-full text-left">
-        <thead class="bg-[#2c2c2e] text-gray-400 text-xs uppercase tracking-widest">
-          <tr>
-            <th class="p-4 border-r border-gray-700">Roll No</th>
-            <th class="p-4 border-r border-gray-700">Student Name</th>
-            {% for sub in subjects %}
-            <th class="p-4 text-center border-r border-gray-800/30">{{ sub }}</th>
-            {% endfor %}
-            <th class="p-4 text-center bg-blue-900/20 text-blue-400">Total P</th>
-            <th class="p-4 text-center bg-blue-900/20 text-blue-400 border-l border-gray-700">Attendance %</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-800">
-          {% for student in report_data %}
-          <tr class="hover:bg-white/5 transition">
-            <td class="p-4 text-gray-400 font-mono border-r border-gray-700">{{ student.roll }}</td>
-            <td class="p-4 font-bold border-r border-gray-700 text-white">{{ student.name }}</td>
+    <div class="glass-card rounded-[2.5rem] border border-white/10 overflow-hidden shadow-2xl">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm border-collapse">
+          <thead class="bg-zinc-800/50 text-zinc-500 text-[10px] font-black uppercase tracking-[0.15em]">
+            <tr>
+              <th class="p-5 border-r border-white/5">Identity</th>
+              <th class="p-5 border-r border-white/5">Program</th>
+              {% for sub in subjects %}
+              <th class="p-5 text-center border-r border-white/5 min-w-[100px]">{{ sub }}</th>
+              {% endfor %}
+              <th class="p-5 text-center bg-blue-600/10 text-blue-400">Yield</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            {% for student in report_data %}
+            <tr class="hover:bg-white/5 transition group">
+              <td class="p-5 border-r border-white/5">
+                <div class="font-bold text-white">{{ student.name }}</div>
+                <div class="text-[10px] font-mono text-zinc-500">Roll: {{ student.roll }}</div>
+              </td>
+              <td class="p-5 border-r border-white/5">
+                <div class="text-xs font-bold text-zinc-300">{{ student.branch }}</div>
+                <div class="text-[10px] text-zinc-500 uppercase">{{ student.sem }}</div>
+              </td>
 
-            {% for sub in subjects %}
-            <td class="p-4 text-center border-r border-gray-800/30">
-              <span
-                class="uppercase {{ 'text-green-500 font-bold' if student.attendance[sub] == 'p' else 'text-red-500 opacity-40' }}">
-                {{ student.attendance[sub] }}
-              </span>
-            </td>
-            {% endfor %}
+              {% for sub in subjects %}
+              <td class="p-5 text-center border-r border-white/5">
+                {% if student.attendance[sub] == 'P' %}
+                <span
+                  class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-500 font-black text-xs border border-emerald-500/20">P</span>
+                {% else %}
+                <span
+                  class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-500/5 text-red-500/30 font-bold text-xs border border-white/5">A</span>
+                {% endif %}
+              </td>
+              {% endfor %}
 
-            <td class="p-4 text-center font-bold text-white bg-blue-900/10">
-              {{ student.present_count }} / {{ subjects|length }}
-            </td>
-            <td class="p-4 text-center font-bold bg-blue-900/10 border-l border-gray-700">
-              <span
-                class="{{ 'text-green-400' if student.percentage >= 75 else 'text-yellow-500' if student.percentage >= 50 else 'text-red-500' }}">
-                {{ student.percentage }}%
-              </span>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+              <td class="p-5 text-center bg-blue-600/5">
+                <div class="text-sm font-black text-white">{{ student.count }} <span class="text-zinc-500 text-[10px]">/
+                    {{ subjects|length }}</span></div>
+                {% set perc = (student.count / (subjects|length or 1)) * 100 %}
+                <div
+                  class="text-[9px] font-bold {{ 'text-emerald-400' if perc >= 75 else 'text-amber-400' if perc >= 50 else 'text-red-500' }}">
+                  {{ perc|round(1) }}% Efficiency
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
