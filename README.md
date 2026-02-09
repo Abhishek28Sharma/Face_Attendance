@@ -1,6 +1,6 @@
 # Digital-Facial-Recognisation-Attendance-System
 
-<img width="1919" height="993" alt="image" src="https://github.com/user-attachments/assets/e5b58429-70fa-4230-8d5c-47fc37f210e5" />
+<img width="1919" height="993" alt="image" src="https://github.com/user-attachments/assets/e5b58429-70fa-4230-8d5c-47fc37f210e5](https://github.com/Abhishek28Sharma/Face_Attendance/blob/main/bg.png" />
 
 The Digital Facial Recognition Attendance System is an advanced, automated system designed to track and manage attendance efficiently using facial recognition technology 🙂🔍. Unlike traditional methods (manual registers 📝 or RFID cards 💳), this system uses computer vision 🤖 and AI 🧠 to identify individuals in real-time ⏱️, ensuring accuracy ✅, security 🔐, and time-saving management ⏳.
 
